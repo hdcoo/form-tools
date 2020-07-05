@@ -1,24 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useContext} from 'react';
+import {Form, Input, Select} from "antd";
+import RuleObjectLayer from "./components/RuleObjectLayer";
+import FormAccess from "./components/FormAccess";
 
 function App() {
+  const [form] = Form.useForm();
+
+  // @ts-ignore
+  window.form = form;
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <Form
+        initialValues={{ruleName: 1, ruleInfo: {ruleLayer: 1}}}
+        form={form}
+      >
+        <Form.Item
+          name="ruleName"
+          label="规则名称"
         >
-          Learn React
-        </a>
-      </header>
+          <Select options={[{
+            value: 1,
+            label: '订单链路'
+          }, {
+            value: 2,
+            label: '门店采购'
+          }]} />
+        </Form.Item>
+
+        <Form.Item
+          name="merchants"
+          label="商户ID"
+          rules={[
+            {required: true, message: '请输入商户ID'}
+          ]}
+        >
+          <Input.TextArea />
+        </Form.Item>
+
+        <FormAccess name="ruleInfo">
+          <RuleObjectLayer />
+        </FormAccess>
+
+      </Form>
     </div>
   );
 }
